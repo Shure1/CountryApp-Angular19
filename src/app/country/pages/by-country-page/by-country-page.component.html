@@ -1,0 +1,16 @@
+
+<app-search-input placeholder="Buscar por pais" (value)="query.set($event)"></app-search-input>
+<app-country-list
+  [countries]="countryResourceRx.value() ?? []"
+  [errorMessage]="countryResourceRx.error()" 
+  [isLoading]="countryResourceRx.isLoading()" 
+  [isEmpty]="countryResourceRx.value()?.length === 0">
+</app-country-list>
+
+
+<!-- Manejo de error en el template con el resource
+@if(countryResourceRx.error()) {
+<h3>{{ countryResourceRx.error() }}</h3>
+}@if(countryResourceRx.hasValue()) {
+<app-country-list [countries]="countryResourceRx.value()"></app-country-list>
+} -->

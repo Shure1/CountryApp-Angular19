@@ -1,0 +1,13 @@
+import { Component } from '@angular/core';
+import { CountryListComponent } from "../../components/country-list/country-list.component";
+import { Location } from '@angular/common';
+
+@Component({
+  selector: 'app-by-region-page',
+  imports: [CountryListComponent],
+  templateUrl: './by-region-page.component.html',
+  styleUrl: './by-region-page.component.css'
+})
+export class ByRegionPageComponent {
+
+}
