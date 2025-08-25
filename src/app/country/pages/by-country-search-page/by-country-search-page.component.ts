@@ -28,7 +28,6 @@ export class ByCountrySearchPageComponent {
     loader: ({ request }) => {
       return this.countryService.searchByCode(request.code)
     }
-
   })
 
 }

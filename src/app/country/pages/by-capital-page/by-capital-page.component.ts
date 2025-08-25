@@ -1,10 +1,11 @@
-import { Component, computed, effect, resource, signal } from '@angular/core';
+import { Component, computed, effect, inject, linkedSignal, resource, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop'
 import { SearchInputComponent } from "../../../shared/components/search-input/search-input.component";
 import { CountryListComponent } from "../../components/country-list/country-list.component";
 import { CountryService } from '../../services/country.service';
 import { Country } from '../../interfaces/country.interface';
 import { firstValueFrom, of } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-by-capital-page',
@@ -16,10 +17,17 @@ export class ByCapitalPageComponent {
   public isLoading = signal(false)
   public isError = signal(null)
   public countries = signal<Country[]>([])
-  public query = signal('')
 
-  constructor(private countryService: CountryService) {
+  public activatedRoute = inject(ActivatedRoute)
 
+  
+  public queryParam: string = this.activatedRoute.snapshot.queryParamMap.get('query') ?? ''
+  public query = linkedSignal(() => this.queryParam)
+
+  constructor(
+    private countryService: CountryService,
+    private router: Router
+  ) {
   }
 
   //TODO: Manejo con resource de peticiones, retorna un Observable
@@ -27,7 +35,8 @@ export class ByCapitalPageComponent {
     request: () => ({ query: this.query() }),
     loader: ({ request }) => {
       if (!request.query) return of([])
-
+      this.router.navigate(['/country/by-capital'], { queryParams:{ query: request.query }})
+       
       return this.countryService.searchByCapital(request.query)
     }
   })
