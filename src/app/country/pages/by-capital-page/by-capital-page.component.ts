@@ -20,7 +20,7 @@ export class ByCapitalPageComponent {
 
   public activatedRoute = inject(ActivatedRoute)
 
-  
+
   public queryParam: string = this.activatedRoute.snapshot.queryParamMap.get('query') ?? ''
   public query = linkedSignal(() => this.queryParam)
 
@@ -35,8 +35,9 @@ export class ByCapitalPageComponent {
     request: () => ({ query: this.query() }),
     loader: ({ request }) => {
       if (!request.query) return of([])
-      this.router.navigate(['/country/by-capital'], { queryParams:{ query: request.query }})
-       
+
+      this.router.navigate(['/country/by-capital'], { queryParams: { query: request.query } })
+
       return this.countryService.searchByCapital(request.query)
     }
   })
@@ -54,7 +55,7 @@ export class ByCapitalPageComponent {
   public errorResource = computed(() => { this.countryResource.error() })
 
   private errEff = effect(() => {
-    if(this.countryResource.error()) {
+    if (this.countryResource.error()) {
       this.hanldeError()
     }
   })

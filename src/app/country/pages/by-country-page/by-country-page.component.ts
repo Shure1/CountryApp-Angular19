@@ -4,7 +4,7 @@ import { CountryListComponent } from "../../components/country-list/country-list
 import { firstValueFrom, of } from 'rxjs';
 import { CountryService } from '../../services/country.service';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-by-country-page',
@@ -20,13 +20,18 @@ export class ByCountryPageComponent {
   public queryParam: string = this.activatedRoute.snapshot.queryParamMap.get('query') ?? ''
   public query = linkedSignal(() => this.queryParam)
 
-  constructor(private readonly countryService: CountryService) {}
+  constructor(
+    private readonly countryService: CountryService,
+    private router: Router
+  ) {}
 
   //TODO: Manejo con resource de peticiones, retorna un Observable
   public countryResourceRx = rxResource({
     request: () => ({ query: this.query() }),
     loader: ({ request }) => {
       if (!request.query) return of([])
+
+      this.router.navigate(['/country/by-country'], { queryParams:{ query: request.query }})
 
       return this.countryService.searchByCountries(request.query)
     }
